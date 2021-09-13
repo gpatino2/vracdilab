@@ -9,7 +9,7 @@ inputs:
     default: 1
   totalMemoryMB:
     type: integer
-    description: Machine virtual memory size in Megabytes
+    description: Machine virtual memory size in MG
     default: 1024
   requestinputs:
     type: object
