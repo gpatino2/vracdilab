@@ -5,7 +5,7 @@ formatVersion: 1
 inputs:
   cpuCount:
     type: integer
-    description: Number of virtual processors
+    description: Number of processors
     default: 1
   totalMemoryMB:
     type: integer
