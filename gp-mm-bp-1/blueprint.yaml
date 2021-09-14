@@ -1,5 +1,5 @@
 # Created by GP
-name: gp-bp-1
+name: gp-mm-bp-1
 version: 1
 formatVersion: 1
 inputs:
@@ -9,28 +9,28 @@ inputs:
     default: 1
   totalMemoryMB:
     type: integer
-    description: Machine virtual memory size in MBs
+    description: Machine virtual memory size in Megabytes
     default: 1024
+  tomcatCount:
+    type: integer
+    description: Number of Machine
+    default: 1
+  mqCount:
+    type: integer
+    description: Number of Machines
+    default: 1
   requestinputs:
     type: object
     $ref: /ref/property-groups/requestInputs
 resources:
   Cloud_Network_1:
     type: Cloud.Network
-    metadata:
-      layoutPosition:
-        - 0
-        - 0
     properties:
       networkType: existing
       constraints:
         - tag: 'vlan:tblab-asg'
-  Cloud_vSphere_Machine_1:
+  tomcat_1:
     type: Cloud.vSphere.Machine
-    metadata:
-      layoutPosition:
-        - 1
-        - 0
     properties:
       DTCC.StorageOffering: '${input.requestinputs.DTCCStorageOffering}'
       DTCC.AppDetail: '${input.requestinputs.DTCCAppDetail}'
@@ -43,6 +43,28 @@ resources:
       cpuCount: '${input.cpuCount}'
       totalMemoryMB: '${input.totalMemoryMB}'
       cloudConfig: null
+      count: '${input.tomcatCount}'
+      customizationSpec: CentOS7
+      constraints:
+        - tag: 'account:tblabasgvc01.cdi.demo / TBLAB-1'
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+          assignment: static
+  MQ_1:
+    type: Cloud.vSphere.Machine
+    properties:
+      DTCC.StorageOffering: '${input.requestinputs.DTCCStorageOffering}'
+      DTCC.AppDetail: '${input.requestinputs.DTCCAppDetail}'
+      DTCC.environment: '${input.requestinputs.DTCCenvironment}'
+      Vrm.DataCenter.Location: '${input.requestinputs.VrmDataCenterLocation}'
+      DTCC.Memory: '${input.totalMemoryMB}'
+      DTCC.workload: '${input.requestinputs.DTCCworkload}'
+      DTCC.sysid: '${input.requestinputs.DTCCsysid}'
+      imageRef: asg-LC-vra03
+      cpuCount: '${input.cpuCount}'
+      totalMemoryMB: '${input.totalMemoryMB}'
+      cloudConfig: null
+      count: '${input.mqCount}'
       customizationSpec: CentOS7
       constraints:
         - tag: 'account:tblabasgvc01.cdi.demo / TBLAB-1'
